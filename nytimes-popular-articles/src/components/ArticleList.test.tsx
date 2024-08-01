@@ -37,8 +37,7 @@ const articles: Article[] = [
 
 describe("ArticleList", () => {
   beforeEach(() => {
-    // @ts-ignore
-    fetchMostPopularArticles.mockResolvedValue(articles);
+    (fetchMostPopularArticles as jest.Mock).mockResolvedValue(articles);
   });
 
   it("fetches and displays articles", async () => {
