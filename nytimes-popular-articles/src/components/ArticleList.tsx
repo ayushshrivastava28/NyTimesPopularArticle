@@ -3,9 +3,7 @@ import { fetchMostPopularArticles } from "../services/ApiService";
 import { Article } from "../types/Article";
 import "./ArticleList.css";
 
-interface ArticleListProps {}
-
-const ArticleList: React.FC<ArticleListProps> = () => {
+const ArticleList: React.FC = () => {
   const [articles, setArticles] = useState<Article[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
 

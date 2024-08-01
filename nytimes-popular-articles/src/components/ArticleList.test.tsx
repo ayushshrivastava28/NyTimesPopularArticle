@@ -1,3 +1,4 @@
+import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import { fetchMostPopularArticles } from "../services/ApiService";
 import { Article } from "../types/Article";
