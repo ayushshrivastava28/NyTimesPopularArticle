@@ -2,19 +2,23 @@ import React, { useEffect, useState } from "react";
 import { fetchMostPopularArticles } from "../services/ApiService";
 import { Article } from "../types/Article";
 import "./ArticleList.css";
-import dummyImg from "../assets/images.jpeg";
 
-interface ArticleListProps {
-  //   onArticleSelect: (article: Article) => void;
-}
+interface ArticleListProps {}
 
-const ArticleList: React.FC<ArticleListProps> = ({}) => {
+const ArticleList: React.FC<ArticleListProps> = () => {
   const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await fetchMostPopularArticles(1); // Using a period of 1 day
-      setArticles(data);
+      try {
+        const data = await fetchMostPopularArticles(1); // Using a period of 1 day
+        setArticles(data);
+      } catch (error) {
+        console.error("Error fetching articles:", error);
+      } finally {
+        setLoading(false);
+      }
     };
     fetchData();
   }, []);
@@ -23,10 +27,13 @@ const ArticleList: React.FC<ArticleListProps> = ({}) => {
     const media = article?.media?.[0];
     return media
       ? media["media-metadata"].find((m) => m.format === "mediumThreeByTwo210")
-          ?.url || dummyImg
-      : dummyImg;
+          ?.url || ""
+      : "";
   };
-  console.log("art", articles);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="article-list">
@@ -43,7 +50,7 @@ const ArticleList: React.FC<ArticleListProps> = ({}) => {
               <h2>{article.title}</h2>
               <p>{article.abstract}</p>
               <div className="info">
-                <p>Published By: {article.byline}</p>
+                <p>Published by: {article.byline}</p>
                 <p>
                   Published on:{" "}
                   {new Date(article.published_date).toDateString()}
